@@ -120,6 +120,7 @@ public:
     @todo              Add server error messages to exceptions.
     **/
     void fetch(const std::string& mailbox, unsigned long message_no, message& msg, bool header_only = false);
+    void fetch(unsigned long message_no, message& msg, bool header_only = false);
 
     /**
     Getting the mailbox statistics.
@@ -187,7 +188,7 @@ public:
     **/
     bool rename_folder(const std::list<std::string>& old_name, const std::list<std::string>& new_name);
 
-protected:
+public:
 
     /**
     Initiating a session to the server.

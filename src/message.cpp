@@ -80,6 +80,7 @@ const string message::SUBJECT_HEADER{"Subject"};
 const string message::DATE_HEADER{"Date"};
 const string message::MIME_VERSION_HEADER{"MIME-Version"};
 
+const string message::MESSAGE_ID{ "Message-ID" };
 
 message::message() : mime()
 {
@@ -413,8 +414,8 @@ void message::parse_header_line(const string& header_line)
 {
     mime::parse_header_line(header_line);
 
-    if (header_line.length() > string::size_type(_line_policy))
-        throw message_error("Line policy overflow in a header.");
+    //if (header_line.length() > string::size_type(_line_policy))
+    //    throw message_error("Line policy overflow in a header.");
 
     // TODO: header name and header value already parsed in `mime::parse_header_line`, so this is not the optimal way to do it
     string header_name, header_value;
@@ -432,6 +433,10 @@ void message::parse_header_line(const string& header_line)
         mailboxes mbx = parse_address_list(header_value);
         if (!mbx.addresses.empty())
             _sender = mbx.addresses[0];
+    }
+    else if (iequals(header_name, MESSAGE_ID))
+    {
+        _message_id = trim_copy(header_value);
     }
     else if (iequals(header_name, REPLY_TO_HEADER))
     {
@@ -455,6 +460,10 @@ void message::parse_header_line(const string& header_line)
         _version = trim_copy(header_value);
 }
 
+string message::message_id() const
+{
+    return _message_id;
+}
 
 string message::format_address_list(const mailboxes& mailbox_list) const
 {

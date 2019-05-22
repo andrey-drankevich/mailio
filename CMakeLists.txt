@@ -5,13 +5,13 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # options for mailio to control how the project is built.
-option(MAILIO_BUILD_SHARED_LIBRARY "Turn on to build mailio as a shared library." ON)
-option(MAILIO_BUILD_DOCUMENTATION "Turn on to build doxygen based documentation." ON)
-option(MAILIO_BUILD_EXAMPLES "Turn on to build examples." ON)
+option(MAILIO_BUILD_SHARED_LIBRARY "Turn on to build mailio as a shared library." OFF)
+option(MAILIO_BUILD_DOCUMENTATION "Turn on to build doxygen based documentation." OFF)
+option(MAILIO_BUILD_EXAMPLES "Turn on to build examples." OFF)
 
 # add a dependent option to build latex documentation or not.
 include(CMakeDependentOption)
-cmake_dependent_option(MAILIO_BUILD_LATEX_DOCUMENTATION "Build latex docs" ON "MAILIO_BUILD_DOCUMENTATION" ON)
+cmake_dependent_option(MAILIO_BUILD_LATEX_DOCUMENTATION "Build latex docs" OFF "MAILIO_BUILD_DOCUMENTATION" OFF)
 
 if(WIN32)
     set(Boost_USE_STATIC_LIBS ON)

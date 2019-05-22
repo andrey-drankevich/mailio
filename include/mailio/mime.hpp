@@ -650,6 +650,8 @@ protected:
     **/
     content_type_t _content_type;
 
+    std::string _message_id;
+
     /**
     Name of mime.
     

@@ -278,6 +278,8 @@ public:
     **/
     std::string subject() const;
 
+    std::string message_id() const;
+
     /**
     Getting the date, time and zone.
 
@@ -367,6 +369,8 @@ protected:
     Subject header name.
     **/
     static const std::string SUBJECT_HEADER;
+
+    static const std::string MESSAGE_ID;
 
     /**
     Date header name.

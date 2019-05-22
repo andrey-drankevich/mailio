@@ -84,8 +84,13 @@ void imap::authenticate(const string& username, const string& password, auth_met
 // fetching literal is the only place where line is ended with LF only, instead of CRLF; thus, `receive(true)` and counting EOLs is performed
 void imap::fetch(const string& mailbox, unsigned long message_no, message& msg, bool header_only)
 {
-    const string RFC822_TOKEN = string("RFC822") + (header_only ? ".HEADER" : "");
     select(mailbox);
+    fetch(message_no, msg, header_only);
+}
+// fetching literal is the only place where line is ended with LF only, instead of CRLF; thus, `receive(true)` and counting EOLs is performed
+void imap::fetch(unsigned long message_no, message& msg, bool header_only)
+{
+    const string RFC822_TOKEN = string("RFC822") + (header_only ? ".HEADER" : "");
     _dlg->send(format("FETCH " + to_string(message_no) + " " + RFC822_TOKEN));
 
     bool has_more = true;
@@ -93,7 +98,7 @@ void imap::fetch(const string& mailbox, unsigned long message_no, message& msg, 
     {
         string line = _dlg->receive();
         tuple<string, string, string> tag_result_response = parse_tag_result(line);
-        
+
         if (std::get<0>(tag_result_response) == "*")
         {
             parse_response(std::get<2>(tag_result_response));
@@ -111,7 +116,7 @@ void imap::fetch(const string& mailbox, unsigned long message_no, message& msg, 
                                 rfc_found = true;
                                 continue;
                             }
-                            
+
                             if ((*token)->token_type == response_token_t::token_type_t::LITERAL)
                                 if (rfc_found)
                                 {
@@ -158,14 +163,14 @@ void imap::fetch(const string& mailbox, unsigned long message_no, message& msg, 
         else
             throw imap_error("Parsing failure.");
     }
-        
+
     reset_response_parser();
 }
 
 
 auto imap::statistics(const string& mailbox) -> mailbox_stat_t
 {
-    _dlg->send(format("STATUS " + mailbox + " (messages)"));
+    _dlg->send(format("STATUS \"" + mailbox + "\" (messages)"));
     mailbox_stat_t stat;
     
     bool has_more = true;
@@ -384,7 +389,7 @@ void imap::auth_login(const string& username, const string& password)
 
 void imap::select(const string& mailbox)
 {
-    _dlg->send(format("SELECT " + mailbox));
+    _dlg->send(format("SELECT \"" + mailbox+"\""));
 
     bool has_more = true;
     while (has_more)
@@ -692,7 +697,7 @@ string imap::folder_tree_to_string(const list<string>& folder_tree, string delim
     string folders;
     int elem = 0;
     for (const auto& f : folder_tree)
-        if (elem++ < folder_tree.size())
+        if (++elem < folder_tree.size())
             folders += f + delimiter;
         else
             folders += f;

@@ -76,8 +76,8 @@ string bit7::decode(const vector<string>& text) const
     string dec_text;
     for (const auto& line : text)
     {
-        if (line.length() > string::size_type(_line_policy))
-            throw codec_error("Line policy overflow.");
+//         if (line.length() > string::size_type(_line_policy))
+//             throw codec_error("Line policy overflow.");
         
         for (auto ch : line)
         {
