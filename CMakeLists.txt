@@ -13,9 +13,7 @@ option(MAILIO_BUILD_EXAMPLES "Turn on to build examples." OFF)
 include(CMakeDependentOption)
 cmake_dependent_option(MAILIO_BUILD_LATEX_DOCUMENTATION "Build latex docs" OFF "MAILIO_BUILD_DOCUMENTATION" OFF)
 
-if(WIN32)
-    set(Boost_USE_STATIC_LIBS ON)
-endif(WIN32)
+set(Boost_USE_STATIC_LIBS ON)
 
 find_package(Boost REQUIRED COMPONENTS system date_time regex)
 find_package(OpenSSL)
