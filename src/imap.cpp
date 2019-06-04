@@ -500,7 +500,7 @@ void imap::parse_response(const string& response)
         }
     }
     
-    shared_ptr<response_token_t> cur_token;
+    shared_ptr<response_token_t> cur_token = make_shared<response_token_t>();
     for (auto ch : response)
     {
         switch (ch)
@@ -627,6 +627,9 @@ void imap::parse_response(const string& response)
                     _atom_state = atom_state_t::NONE;
             }
             break;
+
+            case 0:
+                break;
             
             default:
             {
